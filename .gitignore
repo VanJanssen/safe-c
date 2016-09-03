@@ -1,3 +1,4 @@
+# Cmake specific files
 CMakeCache.txt
 CMakeFiles
 CMakeScripts
@@ -5,3 +6,10 @@ Makefile
 cmake_install.cmake
 install_manifest.txt
 CTestTestfile.cmake
+
+# Build directroy
+build/*
+
+# Eclipse project files
+.project
+.cproject
