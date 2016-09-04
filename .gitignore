@@ -13,3 +13,6 @@ build/*
 # Eclipse project files
 .project
 .cproject
+
+# Visual Studio user folder
+.vscode/*
