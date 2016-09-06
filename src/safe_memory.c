@@ -21,3 +21,12 @@ void* safe_malloc_function(size_t size, const char* calling_function)
     memset(memory, 0, size);
     return memory;
 }
+
+void safe_free_function(void** pointer)
+{
+    if (pointer != NULL)
+    {
+        free(*pointer);
+        *pointer = NULL;
+    }
+}
