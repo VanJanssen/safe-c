@@ -1,4 +1,4 @@
-#include "safe-memory.h"
+#include "safe-c/safe_memory.h"
 
 #include <stdio.h>
 #include <stdlib.h>

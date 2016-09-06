@@ -3,4 +3,7 @@ set(CMAKE_LEGACY_CYGWIN_WIN32 0)
 
 project ("Safe C" C)
 
-add_library(safe-c safe-memory.c)
+include_directories(include)
+
+add_library(safe-c src/safe_memory.c)
+
