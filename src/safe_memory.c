@@ -8,13 +8,19 @@ void* safe_malloc_function(size_t size, const char* calling_function)
 {
     if (size == 0)
     {
-        return NULL;
+        fprintf(stderr, "Error allocating memory: The function %s called "
+                "'safe_malloc' and requested zero memory. The pointer should "
+                "be explicitly set to NULL instead.\n",
+                calling_function);
+        exit(EXIT_FAILURE);
     }
 
     void* memory = malloc(size);
     if (!memory)
     {
-        fprintf(stderr, "Error: not enough memory for malloc in function: %s",
+        fprintf(stderr, "Error allocating memory: The function %s called "
+                "'safe_malloc' requesting %u bytes of memory, but an error "
+                "occurred allocating this amount of memory. Exiting",
                 calling_function);
         exit(EXIT_FAILURE);
     }
