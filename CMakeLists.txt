@@ -5,5 +5,6 @@ project ("Safe C" C)
 
 include_directories(include)
 
-add_library(safe-c src/safe_memory.c)
+add_library(safe-c src/safe_memory.c
+                   src/safe_string.c)
 
