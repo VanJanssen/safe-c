@@ -19,12 +19,12 @@ void* safe_malloc_function(size_t size, const char* calling_function)
     if (!memory)
     {
         fprintf(stderr, "Error allocating memory: The function %s called "
-                "'safe_malloc' requesting %u bytes of memory, but an error "
+                "'safe_malloc' requesting %zu bytes of memory, but an error "
                 "occurred allocating this amount of memory. Exiting",
-                calling_function);
+                calling_function, size);
         exit(EXIT_FAILURE);
     }
-    memset(memory, 0, size);
+    memory = memset(memory, 0, size);
     return memory;
 }
 
