@@ -32,7 +32,20 @@ void* safe_malloc_function(size_t size, const char* calling_function);
 
 #define safe_malloc(size) safe_malloc_function(size, __FUNCTION__);
 
-void safe_free_function(void** pointer);
+/**
+ * Frees previously allocated memory and sets the passed pointer to NULL.
+ *
+ * This function requires an address the a pointer, the macro function
+ * `safe_free` can be used to call this function with the pointer itself, so
+ * usage is the same as that of `free()`. The macro calls this function with
+ * the address of the passed pointer and the proper cast.
+ *
+ * @param pointer_address
+ *      The address of the pointer that shall be freed.
+ *      If `pointer_address == 0`, nothing is done.
+ */
+void safe_free_function(void** pointer_address);
+
 #define safe_free(pointer) safe_free_function((void **) &(pointer))
 
 #endif /* SAFE_MEMORY_H_ */

@@ -28,11 +28,11 @@ void* safe_malloc_function(size_t size, const char* calling_function)
     return memory;
 }
 
-void safe_free_function(void** pointer)
+void safe_free_function(void** pointer_address)
 {
-    if (pointer != NULL)
+    if (pointer_address != NULL)
     {
-        free(*pointer);
-        *pointer = NULL;
+        free(*pointer_address);
+        *pointer_address = NULL;
     }
 }
