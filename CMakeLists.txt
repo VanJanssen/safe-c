@@ -15,6 +15,8 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${warnings}")
 
 include_directories(include)
 
-add_library(safe-c src/safe_memory.c
+add_library(safe-c include/safe-c/safe_memory.h
+                   include/safe-c/safe_string.h
+                   src/safe_memory.c
                    src/safe_string.c)
 
