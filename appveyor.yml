@@ -1,5 +1,10 @@
+configuration:
+  - Debug
+  - Release
+
 build_script:
   - mkdir build
   - cd build
-  - cmake -G "Visual Studio 14" ..
-  - msbuild "Safe C.sln"
+  - cmake ..
+  - cmake --build . --config %configuration%
+  
