@@ -1,6 +1,10 @@
 #ifndef SAFE_MEMORY_H_
 #define SAFE_MEMORY_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdlib.h>
 
 /**
@@ -47,5 +51,9 @@ void* safe_malloc_function(size_t size, const char* calling_function);
 void safe_free_function(void** pointer_address);
 
 #define safe_free(pointer) safe_free_function((void **) &(pointer))
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* SAFE_MEMORY_H_ */
