@@ -1,7 +1,6 @@
 #include "safe-c/safe_memory.h"
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 void* safe_malloc_function(size_t size, const char* calling_function)

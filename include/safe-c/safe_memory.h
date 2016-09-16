@@ -1,7 +1,7 @@
 #ifndef SAFE_MEMORY_H_
 #define SAFE_MEMORY_H_
 
-#include <malloc.h>
+#include <stdlib.h>
 
 /**
  * Memory allocation with strict boundary and error checking.
