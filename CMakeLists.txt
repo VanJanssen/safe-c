@@ -23,9 +23,6 @@ add_library(safe-c include/safe-c/safe_memory.h
 find_library(CRITERION criterion)
 
 if(CRITERION)
-    add_executable(unit_tests tests/safe_memory/safe_malloc.c)
-    target_link_libraries(unit_tests safe-c criterion)
-    
     enable_testing()
-    add_test(unit_tests unit_tests)
+    add_subdirectory(tests)
 endif()
