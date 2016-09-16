@@ -2,9 +2,23 @@ configuration:
   - Debug
   - Release
 
+install:
+  # Update submodules
+  - git submodule update --init
+
+  # Build Criterion unit testing framework
+  - cd %APPVEYOR_BUILD_FOLDER%\dependencies\criterion
+  - mkdir build
+  - cd build
+  - cmake ..
+  - cmake --build . --config Release
+  - set PATH=%PATH%;%APPVEYOR_BUILD_FOLDER%\dependencies\criterion\build\Release
+
 build_script:
+  - cd %APPVEYOR_BUILD_FOLDER%
   - mkdir build
   - cd build
   - cmake ..
   - cmake --build . --config %configuration%
+  - ctest
   
