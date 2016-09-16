@@ -20,3 +20,9 @@ add_library(safe-c include/safe-c/safe_memory.h
                    src/safe_memory.c
                    src/safe_string.c)
 
+find_library(CRITERION criterion)
+
+if(CRITERION)
+    add_executable(tests tests/safe_memory/safe_malloc.c)
+    target_link_libraries(tests safe-c criterion)
+endif()
