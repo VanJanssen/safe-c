@@ -1,7 +1,19 @@
 language: c
+sudo: true
+
+install:
+  # Install the Criterion unit testing framework
+  - cd ${TRAVIS_BUILD_DIR}
+  - cd dependencies/criterion/
+  - cmake .
+  - make
+  - sudo make install
+  - sudo ldconfig
 
 script:
+  - cd ${TRAVIS_BUILD_DIR}
   - mkdir build
   - cd build
-  - cmake -G "Unix Makefiles" ..
-  - make
+  - cmake ..
+  - cmake --build .
+  - ctest

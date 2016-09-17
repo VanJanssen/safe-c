@@ -20,3 +20,15 @@ add_library(safe-c include/safe-c/safe_memory.h
                    src/safe_memory.c
                    src/safe_string.c)
 
+find_library(CRITERION criterion)
+
+if(CRITERION)
+    if (${CMAKE_C_COMPILER_ID} STREQUAL "MSVC")
+        # For now, assume that criterion.lib is located in this folder on Windows.
+        link_directories(${CMAKE_CURRENT_SOURCE_DIR}/dependencies/criterion/build/Release/)
+        include_directories(dependencies/criterion/include)
+    endif()
+
+    enable_testing()
+    add_subdirectory(tests)
+endif()

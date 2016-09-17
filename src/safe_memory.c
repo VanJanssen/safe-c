@@ -1,7 +1,6 @@
 #include "safe-c/safe_memory.h"
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 void* safe_malloc_function(size_t size, const char* calling_function)
@@ -20,7 +19,7 @@ void* safe_malloc_function(size_t size, const char* calling_function)
     {
         fprintf(stderr, "Error allocating memory: The function %s called "
                 "'safe_malloc' requesting %zu bytes of memory, but an error "
-                "occurred allocating this amount of memory. Exiting",
+                "occurred allocating this amount of memory.\n",
                 calling_function, size);
         exit(EXIT_FAILURE);
     }
