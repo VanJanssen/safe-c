@@ -3,10 +3,10 @@ set(CMAKE_LEGACY_CYGWIN_WIN32 0)
 
 project ("Safe C" C)
 
-if (${CMAKE_C_COMPILER_ID} STREQUAL "GNU" OR
-    ${CMAKE_C_COMPILER_ID} STREQUAL "Clang")
+if (${CMAKE_C_COMPILER_ID} STREQUAL GNU OR
+    ${CMAKE_C_COMPILER_ID} STREQUAL Clang)
     set(warnings "-Wall -Wextra -Werror -Wmissing-include-dirs -Wswitch-default -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wconversion -Wstrict-prototypes -Wmissing-prototypes -Wnested-externs -Wdouble-promotion -Wtrampolines -Wlogical-op")
-elseif (${CMAKE_C_COMPILER_ID} STREQUAL "MSVC")
+elseif (${CMAKE_C_COMPILER_ID} STREQUAL MSVC)
     set(warnings "/W4 /WX /wd4996")
 endif()
 
@@ -23,7 +23,7 @@ add_library(safe-c include/safe-c/safe_memory.h
 find_library(CRITERION criterion)
 
 if(CRITERION)
-    if (${CMAKE_C_COMPILER_ID} STREQUAL "MSVC")
+    if (${CMAKE_C_COMPILER_ID} STREQUAL MSVC)
         # For now, assume that criterion.lib is located in this folder on Windows.
         link_directories(${CMAKE_CURRENT_SOURCE_DIR}/dependencies/criterion/build/Release/)
         include_directories(dependencies/criterion/include)
