@@ -2,6 +2,9 @@ configuration:
   - Debug
   - Release
 
+environment:
+  CTEST_OUTPUT_ON_FAILURE: TRUE
+
 install:
   # Update submodules
   - git submodule update --init
