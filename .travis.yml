@@ -1,6 +1,9 @@
 language: c
 sudo: true
 
+env:
+  - CTEST_OUTPUT_ON_FAILURE=TRUE
+
 install:
   # Install the Criterion unit testing framework
   - cd ${TRAVIS_BUILD_DIR}

@@ -2,6 +2,11 @@ configuration:
   - Debug
   - Release
 
+environment:
+  CTEST_OUTPUT_ON_FAILURE: TRUE
+
+init:
+  - del "C:\Program Files (x86)\MSBuild\14.0\Microsoft.Common.targets\ImportAfter\Xamarin.Common.targets"
 install:
   # Update submodules
   - git submodule update --init

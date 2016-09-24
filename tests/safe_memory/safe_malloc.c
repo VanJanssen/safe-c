@@ -17,12 +17,12 @@ Test(safe_malloc, max_expect_exit, .exit_code = 1)
 Test(safe_malloc, one_success, .exit_code = 0)
 {
     void* pointer = safe_malloc(1);
-    free(pointer);
+    safe_free(pointer);
 }
 
 Test(safe_malloc, low_value_success, .exit_code = 0)
 {
     void* pointer = safe_malloc(100);
-    free(pointer);
+    safe_free(pointer);
 }
 
