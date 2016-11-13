@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 
-void* safe_malloc_function(size_t size, const char* calling_function)
+void* safe_malloc_function(const size_t size, const char* calling_function)
 {
     if (size == 0)
     {
@@ -35,7 +35,7 @@ void safe_free_function(void** pointer_address)
     }
 }
 
-void* safe_realloc_function(void** pointer_address, size_t size,
+void* safe_realloc_function(void** pointer_address, const size_t size,
         const char* calling_function)
 {
     if (!pointer_address)

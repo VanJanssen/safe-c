@@ -32,7 +32,7 @@ extern "C" {
  *      call `exit()` and print an error message indicating the caller function
  *      and the amount of memory request.
  */
-void* safe_malloc_function(size_t size, const char* calling_function);
+void* safe_malloc_function(const size_t size, const char* calling_function);
 
 #define safe_malloc(size) safe_malloc_function(size, __FUNCTION__);
 
@@ -99,7 +99,7 @@ void safe_free_function(void** pointer_address);
 *      call `exit()` and print an error message indicating the caller function
 *      and the amount of memory request.
 */
-void* safe_realloc_function(void** pointer_address, size_t size,
+void* safe_realloc_function(void** pointer_address, const size_t size,
         const char* calling_function);
 
 #define safe_realloc(pointer, size) safe_realloc_function((void**) &(pointer), size, __FUNCTION__)
