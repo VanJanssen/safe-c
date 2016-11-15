@@ -7,10 +7,12 @@ env:
 install:
   # Install the Criterion unit testing framework
   - cd ${TRAVIS_BUILD_DIR}
-  - cd dependencies/criterion/
-  - cmake .
-  - make
-  - sudo make install
+  - mkdir dependencies
+  - cd dependencies
+  - wget https://github.com/Snaipe/Criterion/releases/download/v2.2.2/criterion-v2.2.2-linux-x86_64.tar.bz2 -O criterion.tar.bz2
+  - tar xvjf criterion.tar.bz2
+  - mv criterion-v2.2.2/* .
+  - sudo mv lib/libcriterion.so /usr/local/lib/libcriterion.so
   - sudo ldconfig
 
 script:

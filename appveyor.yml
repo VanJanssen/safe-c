@@ -7,17 +7,19 @@ environment:
 
 init:
   - del "C:\Program Files (x86)\MSBuild\14.0\Microsoft.Common.targets\ImportAfter\Xamarin.Common.targets"
-install:
-  # Update submodules
-  - git submodule update --init
 
-  # Build Criterion unit testing framework
-  - cd %APPVEYOR_BUILD_FOLDER%\dependencies\criterion
-  - mkdir build
-  - cd build
-  - cmake ..
-  - cmake --build . --config Release
-  - set PATH=%PATH%;%APPVEYOR_BUILD_FOLDER%\dependencies\criterion\build\Release
+install:
+# Download and setup Criterion unit testing framework.
+  - cd %APPVEYOR_BUILD_FOLDER%
+  - mkdir dependencies
+  - cd dependencies
+  - ps: wget https://github.com/Snaipe/Criterion/releases/download/v2.2.2/criterion-v2.2.2-windows-msvc-x64.tar.bz2 -o criterion.tar.bz2
+  - 7z x criterion.tar.bz2
+  - 7z x criterion.tar
+  - move criterion-v2.2.2\bin .
+  - move criterion-v2.2.2\include .
+  - move criterion-v2.2.2\lib .
+  - set PATH=%PATH%;%APPVEYOR_BUILD_FOLDER%\dependencies\bin
 
 build_script:
   - cd %APPVEYOR_BUILD_FOLDER%

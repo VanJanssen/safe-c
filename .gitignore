@@ -7,7 +7,10 @@ cmake_install.cmake
 install_manifest.txt
 CTestTestfile.cmake
 
-# Build directroy
+# Download directory for external dependencies
+dependencies/*
+
+# Build directory
 build/*
 
 # Eclipse project files
