@@ -11,7 +11,7 @@ extern "C" {
  * Memory allocation with strict boundary and error checking.
  *
  * @param size
- *      The size in bytes to be allocated. Be aware that size in an unsigned
+ *      The size in bytes to be allocated. Be aware that size is an unsigned
  *      type, passing signed values can lead to conversion errors.
  *      If `size == 0`, this function will call `exit()` and print an error
  *      message indicating which function requested zero memory. You should set
@@ -30,7 +30,7 @@ extern "C" {
  *      will be initialized to all zero.
  *      If for some reason the memory couldn't be allocated, this function will
  *      call `exit()` and print an error message indicating the caller function
- *      and the amount of memory request.
+ *      and the amount of memory requested.
  */
 void* safe_malloc_function(const size_t size, const char* calling_function);
 
@@ -53,6 +53,48 @@ void safe_free_function(void** pointer_address);
 #define safe_free(pointer) safe_free_function((void**) &(pointer))
 
 /**
+ * Memory allocation with strict boundary and error checking.
+ *
+ * @param number_of_elements
+ *      The number of elements (each with size `element_size`) to bo allocated.
+ *      Be aware that the number of elements is an unsigned type, passing signed
+ *      values can lead to conversion errors.
+ *      If `number_of_elements == 0`, this function will call `exit()` and print an
+ *      error message indicating which function requested zero memory. You should
+ *      set your pointer to NULL yourself explicitly if you want a pointer without
+ *      memory allocation.
+ *
+ * @param element_size
+ *      The size in bytes of each element to be allocated. Be aware that
+ *      element_size is an unsigned type, passing signed values can lead to
+ *      conversion errors.
+ *      If `element_size == 0`, this function will call `exit()` and print an
+ *      error message indicating which function requested zero memory. You should
+ *      set your pointer to NULL yourself explicitly if you want a pointer without
+ *      memory allocation.
+ *
+ * @param calling_function
+ *      The name of the function calling this function. You can pass a
+ *      custom NULL termination string, or pass the __FUNCTION__ define. You
+ *      can use the macro function `safe_calloc(number_of_elements, element_size)`,
+ *      which will automatically pass the __FUNCTION__ define as second parameter.
+ *      This usage is the most convenient because calling it will be the same as
+ *      `calloc`.
+ *
+ * @return
+ *      The return value will be a pointer to the allocated memory, the memory
+ *      will be initialized to all zero.
+ *      If for some reason the memory couldn't be allocated, this function will
+ *      call `exit()` and print an error message indicating the caller function
+ *      and the amount of memory requested.
+ */
+void* safe_calloc_function(const size_t number_of_elements,
+        const size_t element_size, const char* calling_function);
+
+#define safe_calloc(number_of_elements, element_size) \
+        safe_calloc_function(number_of_elements, element_size, __FUNCTION__)
+
+/**
 * Memory reallocation with strict boundary and error checking.
 *
 * @param pointer_address
@@ -72,7 +114,7 @@ void safe_free_function(void** pointer_address);
 *
 * @param size
 *      The new size in bytes to for the memory block pointed to by `pointer`.
-*      Be aware that size in an unsigned type, passing signed values can lead
+*      Be aware that size is an unsigned type, passing signed values can lead
 *      to conversion errors.
 *      If `size == 0`, this function will free the pointer and then call `exit()`
 *      and print an error message indicating which function requested zero
@@ -97,7 +139,7 @@ void safe_free_function(void** pointer_address);
 *      is the same pointer as before.
 *      If for some reason the memory couldn't be reallocated, this function will
 *      call `exit()` and print an error message indicating the caller function
-*      and the amount of memory request.
+*      and the amount of memory requested.
 */
 void* safe_realloc_function(void** pointer_address, const size_t size,
         const char* calling_function);

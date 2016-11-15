@@ -35,6 +35,41 @@ void safe_free_function(void** pointer_address)
     }
 }
 
+void* safe_calloc_function(const size_t number_of_elements,
+        const size_t element_size, const char* calling_function)
+{
+    if (number_of_elements == 0)
+    {
+        fprintf(stderr, "Error allocating memory: The function %s called "
+                "'safe_calloc' and requested zero memory (number of elements "
+                "== 0). The pointer should be explicitly set to NULL instead.\n",
+                calling_function);
+        exit(EXIT_FAILURE);
+    }
+
+    if (element_size == 0)
+    {
+        fprintf(stderr, "Error allocating memory: The function %s called "
+                "'safe_calloc' and requested zero memory (element size == 0). "
+                "The pointer should be explicitly set to NULL instead.\n",
+                calling_function);
+        exit(EXIT_FAILURE);
+    }
+
+    void* memory = calloc(number_of_elements, element_size);
+    if (!memory)
+    {
+        fprintf(stderr, "Error allocating memory: The function %s called "
+                "'safe_calloc' requesting %zu elements with size %zu each, but "
+                "an error occurred allocating this amount of memory.\n",
+                calling_function, number_of_elements, element_size);
+        exit(EXIT_FAILURE);
+    }
+    // No memset because calloc already initializes memory to all zero.
+
+    return memory;
+}
+
 void* safe_realloc_function(void** pointer_address, const size_t size,
         const char* calling_function)
 {
