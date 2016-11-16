@@ -2,7 +2,23 @@ language: c
 sudo: true
 
 env:
-  - CTEST_OUTPUT_ON_FAILURE=TRUE
+  global:
+    - CTEST_OUTPUT_ON_FAILURE=TRUE
+    # Coverity key
+    - secure: "m7LKrx/ijIK4jhEmCBYXt1/no2isHWhMUEi64DWlmEQE/KZAnBV+VvBCThGvnaWdytB04Aa68EYO1GQP4TfsNYTt6+E5Ou2xqKRng+A1Wsqe9B4aTK4tpLps+wuA9oxLrBsoRssMaOLePtwvD39rhJVTixLsMEbrHHtkx2wBDVlaogDbc47qMTMi3y+2z8p87x+uHTgwqjrBB/cFMvkTl2s+cj8Q6TtjluEmd2uK2xqC8dOUm40m966m2RNgAszY0Ov8SnByeN2E3JBr8IT1Luesy7JquLn4H5wYraSODQW9qleL1O02QxB2JHpeNMR6MhsSgzvVCVWHp41hg1Xzi8SQywE3NDP2vhBJ+lwoXQXRcAuenl+/BoFS1RbTlGdSACvz55pi8jtsF4Tnzk1qhw/bOk0KKyAhHRm89IRe5/wcug2OG+6a/UDkiEUXSB5zq2cumZUYAYIW7eJ5YcxVwSEihGYOJK5B7NO5xNKMdnCXDio98m74OlO9y0n/BYVLo8j+xF+q/8NOEBy9V9JoJrIKinGre5X1xamLiARGKmTkn/kXBNRoV9VSY0WQd+9Ffj+t1O/Y/NFgPdE4lTeM5KanWpsT818Hvck1ITbbrn5fMV0dg431ctOfI/NtKXy1G2xb+dIqBdvDHY6rSM42paYDRZIKjpQskGcHEwrdU7M=" 
+
+before_install:
+      - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
+
+addons:
+  coverity_scan:
+    project:
+      name: "VanJanssen/safe-c"
+      description: "Build submitted via Travis CI"
+    notification_email: erwinjanssen@outlook.com
+    build_command_prepend: "cd ${TRAVIS_BUILD_DIR}; mkdir build; cd build; cmake .."
+    build_command:   "cmake --build ."
+    branch_pattern: coverity-scan
 
 install:
   # Install the Criterion unit testing framework
@@ -17,6 +33,7 @@ install:
 
 script:
   - cd ${TRAVIS_BUILD_DIR}
+  - rm -R build || true
   - mkdir build
   - cd build
   - cmake ..
