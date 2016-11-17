@@ -11,7 +11,8 @@ Test(safe_malloc, zero_expect_exit, .exit_code = 1)
 
 Test(safe_malloc, max_expect_exit, .exit_code = 1)
 {
-    safe_malloc(SIZE_MAX);
+    void* pointer = safe_malloc(SIZE_MAX);
+    safe_free(pointer);
 }
 
 Test(safe_malloc, one_success, .exit_code = 0)

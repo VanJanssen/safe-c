@@ -21,17 +21,20 @@ Test(safe_calloc, both_zero_expect_exit, .exit_code = 1)
 
 Test(safe_calloc, number_of_elements_max_expect_exit, .exit_code = 1)
 {
-    safe_calloc(SIZE_MAX, 10);
+    void* pointer = safe_calloc(SIZE_MAX, 10);
+    safe_free(pointer);
 }
 
 Test(safe_calloc, element_size_max_expect_exit, .exit_code = 1)
 {
-    safe_calloc(10, SIZE_MAX);
+    void* pointer = safe_calloc(10, SIZE_MAX);
+    safe_free(pointer);
 }
 
 Test(safe_calloc, both_max_expect_exit, .exit_code = 1)
 {
-    safe_calloc(SIZE_MAX, SIZE_MAX);
+    void* pointer = safe_calloc(SIZE_MAX, SIZE_MAX);
+    safe_free(pointer);
 }
 
 Test(safe_calloc, one_one_success, .exit_code = 0)
