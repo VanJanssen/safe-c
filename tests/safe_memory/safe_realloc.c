@@ -12,13 +12,15 @@ Test(safe_realloc, address_null_size_valid_expect_exit, .exit_code = 1)
 Test(safe_realloc, pointer_valid_size_zero_expect_exit, .exit_code = 1)
 {
     void* pointer = safe_malloc(10);
-    safe_realloc(pointer, 0);
+    pointer = safe_realloc(pointer, 0);
+    safe_free(pointer);
 }
 
 Test(safe_realloc, pointer_valid_size_SIZE_MAX_expect_exit, .exit_code = 1)
 {
     void* pointer = safe_malloc(10);
-    safe_realloc(pointer, SIZE_MAX);
+    pointer = safe_realloc(pointer, SIZE_MAX);
+    safe_free(pointer);
 }
 
 Test(safe_realloc, pointer_NULL_size_valid)

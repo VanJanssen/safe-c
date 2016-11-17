@@ -16,5 +16,5 @@ Test(safe_free, null_succeed)
 Test(safe_free, free_malloced_succeed)
 {
     void* pointer = safe_malloc(50);
-    safe_free_function(pointer);
+    safe_free(pointer);
 }
