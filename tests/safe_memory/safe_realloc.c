@@ -6,7 +6,8 @@
 
 Test(safe_realloc, address_null_size_valid_expect_exit, .exit_code = 1)
 {
-    safe_realloc_function(NULL, 10, __FUNCTION__);
+    void* shouldnt_allocate = safe_realloc_function(NULL, 10, __FUNCTION__);
+    safe_free(shouldnt_allocate);
 }
 
 Test(safe_realloc, pointer_valid_size_zero_expect_exit, .exit_code = 1)
