@@ -1,6 +1,10 @@
 language: c
 sudo: true
 
+compiler:
+  - gcc
+  - clang
+
 env:
   global:
     - CTEST_OUTPUT_ON_FAILURE=TRUE

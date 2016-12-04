@@ -6,7 +6,7 @@ project ("Safe C" C)
 if(${CMAKE_C_COMPILER_ID} STREQUAL GNU OR
     ${CMAKE_C_COMPILER_ID} STREQUAL Clang)
     # -Wstrict-prototypes can't be used because it causes errors in Criterion
-    set(warnings "-Wall -Wextra -Werror -Wmissing-include-dirs -Wswitch-default -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wconversion -Wmissing-prototypes -Wnested-externs -Wdouble-promotion -Wtrampolines -Wlogical-op")
+    set(warnings "-Wall -Wextra -Werror -Wmissing-include-dirs -Wswitch-default -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wconversion -Wmissing-prototypes -Wnested-externs")
 elseif (${CMAKE_C_COMPILER_ID} STREQUAL MSVC)
     set(warnings "/W4 /WX /wd4996")
 endif()
