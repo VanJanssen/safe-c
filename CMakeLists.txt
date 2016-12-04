@@ -3,17 +3,33 @@ set(CMAKE_LEGACY_CYGWIN_WIN32 0)
 
 project ("Safe C" C)
 
+
+# =========================== Set compiler options ===========================
 if(${CMAKE_C_COMPILER_ID} STREQUAL GNU OR
     ${CMAKE_C_COMPILER_ID} STREQUAL Clang)
     # -Wstrict-prototypes can't be used because it causes errors in Criterion
     set(warnings "-Wall -Wextra -Werror -Wmissing-include-dirs -Wswitch-default -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wconversion -Wmissing-prototypes -Wnested-externs")
 elseif (${CMAKE_C_COMPILER_ID} STREQUAL MSVC)
-    set(warnings "/W4 /WX /wd4996")
+    # For MSVC we use the /Wall option. This option enables various usefull warnings,
+    # but also notification-like warnings that cause the build to fail when using /WX,
+    # so we disable those.
+    set(warnings "/Wall /WX")
+
+    # Warning C4710: 'function' not inlined
+    # The inline keyword is used as a hint for the compiler, this warning indicates
+    # that inlining didn't happen. Can be triggered by standard functions like `fprintf()`
+    set(warnings "${warnings} /wd4710")
+
+    # Warning C4711: 'function' selected for inline expansion
+    # The compiler performed inlining on the given function, although it was not
+    # marked for inlining, as an optimization. This warning is informational.
+    set(warnings "${warnings} /wd4711")
 endif()
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${warnings}")
 
 
+# ========================== Specify library sources =========================
 include_directories(include)
 
 add_library(safe-c include/safe-c/safe_memory.h
@@ -21,15 +37,21 @@ add_library(safe-c include/safe-c/safe_memory.h
                    src/safe_memory.c
                    src/safe_string.c)
 
-# ----- Check for dependencies -----
-link_directories(${CMAKE_CURRENT_SOURCE_DIR}/dependencies/lib)
 
-if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/include)
+# ======================== Enable testing if possible ========================
+set(dependencies_include_dir ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/include)
+set(dependencies_lib_dir ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/lib)
+
+if(IS_DIRECTORY ${dependencies_include_dir})
     include_directories(dependencies/include)
 endif()
 
-# Criterion is the unit testing framework and is required for building the tests.
+if(IS_DIRECTORY ${dependencies_lib_dir})
+    link_directories(${dependencies_lib_dir})
+endif()
+
 find_library(CRITERION criterion)
+
 if(CRITERION)
     message(STATUS "Criterion - found")
     enable_testing()
