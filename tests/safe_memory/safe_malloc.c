@@ -1,6 +1,6 @@
 #include <criterion/criterion.h>
 
-#include "safe-c/safe_memory.h"
+#include "elegan-c/safe_memory.h"
 
 #include <stdint.h>
 

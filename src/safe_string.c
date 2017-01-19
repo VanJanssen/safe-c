@@ -1,3 +1,3 @@
-#include "safe-c/safe_string.h"
+#include "elegan-c/safe_string.h"
 
 
