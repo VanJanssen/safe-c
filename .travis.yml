@@ -17,7 +17,7 @@ before_install:
 addons:
   coverity_scan:
     project:
-      name: "VanJanssen/safe-c"
+      name: "VanJanssen/elegan-c"
       description: "Build submitted via Travis CI"
     notification_email: erwinjanssen@outlook.com
     build_command_prepend: "cd ${TRAVIS_BUILD_DIR}; mkdir build; cd build; cmake .."

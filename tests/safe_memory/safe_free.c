@@ -1,6 +1,6 @@
 #include <criterion/criterion.h>
 
-#include "safe-c/safe_memory.h"
+#include "elegan-c/safe_memory.h"
 
 Test(safe_free_function, null_succeed)
 {

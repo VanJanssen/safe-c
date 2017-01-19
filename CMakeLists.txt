@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 2.8 FATAL_ERROR)
 set(CMAKE_LEGACY_CYGWIN_WIN32 0)
 
-project ("Safe C" C)
+project ("elegan-c" C)
 
 
 # =========================== Set compiler options ===========================
@@ -32,10 +32,12 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${warnings}")
 # ========================== Specify library sources =========================
 include_directories(include)
 
-add_library(safe-c include/safe-c/safe_memory.h
-                   include/safe-c/safe_string.h
-                   src/safe_memory.c
-                   src/safe_string.c)
+add_library(elegan-c
+    include/elegan-c/safe_memory.h
+    include/elegan-c/safe_string.h
+    src/safe_memory.c
+    src/safe_string.c
+)
 
 
 # ======================== Enable testing if possible ========================
