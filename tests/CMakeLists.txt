@@ -2,6 +2,7 @@ function(add_unit_test test_name)
     add_executable(${test_name} ${test_name}.c)
     target_link_libraries(${test_name} elegan-c criterion)
     add_test(${test_name} ${test_name})
+    add_coverage(${test_name})
 endfunction(add_unit_test)
 
 # These warnings are triggered by Criterion when building the unit tests. These warnings
