@@ -9,6 +9,8 @@ init:
   - del "C:\Program Files (x86)\MSBuild\14.0\Microsoft.Common.targets\ImportAfter\Xamarin.Common.targets"
 
 install:
+# Initialize git submodules
+  - git submodule update --init
 # Download and setup Criterion unit testing framework.
   - cd %APPVEYOR_BUILD_FOLDER%
   - mkdir dependencies

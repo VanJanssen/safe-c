@@ -3,6 +3,10 @@ set(CMAKE_LEGACY_CYGWIN_WIN32 0)
 
 project ("elegan-c" C)
 
+# =========================== Enable code coverage ===========================
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/.cmake/codecov/cmake" ${CMAKE_MODULE_PATH})
+find_package(codecov)
+
 
 # =========================== Set compiler options ===========================
 if(${CMAKE_C_COMPILER_ID} STREQUAL GNU OR
@@ -39,6 +43,8 @@ add_library(elegan-c
     src/safe_string.c
 )
 
+add_coverage(elegan-c)
+
 
 # ======================== Enable testing if possible ========================
 set(dependencies_include_dir ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/include)
@@ -61,3 +67,6 @@ if(CRITERION)
 else(CRITERION)
     message(STATUS "Criterion - not found")
 endif()
+
+# ============================= Evaluate coverage ============================
+coverage_evaluate()
