@@ -38,10 +38,12 @@ install:
   - cd ${TRAVIS_BUILD_DIR}
   - mkdir dependencies
   - cd dependencies
-  - wget https://github.com/Snaipe/Criterion/releases/download/v2.2.2/criterion-v2.2.2-linux-x86_64.tar.bz2 -O criterion.tar.bz2
+  - wget https://github.com/Snaipe/Criterion/releases/download/v2.3.0/criterion-v2.3.0-linux-x86_64.tar.bz2 -O criterion.tar.bz2
   - tar xvjf criterion.tar.bz2
-  - mv criterion-v2.2.2/* .
-  - sudo mv lib/libcriterion.so /usr/local/lib/libcriterion.so
+  - mv criterion-v2.3.0/* .
+  - sudo cp lib/libcriterion.so /usr/local/lib/libcriterion.so
+  - sudo cp lib/libcriterion.so.3 /usr/local/lib/libcriterion.so.3
+  - sudo cp lib/libcriterion.so.3.1.0 /usr/local/lib/libcriterion.so.3.1.0
   - sudo ldconfig
 
 script:
