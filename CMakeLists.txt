@@ -38,9 +38,7 @@ include_directories(include)
 
 add_library(elegan-c
     include/elegan-c/safe_memory.h
-    include/elegan-c/safe_string.h
     src/safe_memory.c
-    src/safe_string.c
 )
 
 add_coverage(elegan-c)
