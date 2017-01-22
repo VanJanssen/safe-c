@@ -17,8 +17,6 @@ env:
 
 matrix:
   exclude:
-    - compiler: gcc
-      env: COVERAGE="ENABLE_COVERAGE=ON"
 
 before_install:
       - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
@@ -57,4 +55,5 @@ script:
   - if [ ${COVERAGE} == "ENABLE_COVERAGE=ON" ] ; then make gcov ; fi
 
 after_success:
+  - cd ${TRAVIS_BUILD_DIR}
   - if [ ${COVERAGE} == "ENABLE_COVERAGE=ON" ] ; then bash <(curl -s https://codecov.io/bash) ; fi
