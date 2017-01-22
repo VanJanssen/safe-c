@@ -43,6 +43,10 @@ add_library(elegan-c
 
 add_coverage(elegan-c)
 
+# Evaluate coverage here, so only the code of the main library is included in
+# the coverage report
+coverage_evaluate()
+
 
 # ======================== Enable testing if possible ========================
 set(dependencies_include_dir ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/include)
@@ -65,6 +69,3 @@ if(CRITERION)
 else(CRITERION)
     message(STATUS "Criterion - not found")
 endif()
-
-# ============================= Evaluate coverage ============================
-coverage_evaluate()
