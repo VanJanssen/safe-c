@@ -1,4 +1,4 @@
-#include "elegan-c/safe_memory.h"
+#include "elegan-c/memory.h"
 
 #include <stdio.h>
 #include <string.h>
