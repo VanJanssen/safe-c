@@ -18,4 +18,4 @@ elseif (${CMAKE_C_COMPILER_ID} STREQUAL MSVC)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4255 /wd4464 /wd4820")
 endif()
 
-add_subdirectory(safe_memory)
+add_subdirectory(memory)
