@@ -15,7 +15,8 @@ if(${CMAKE_C_COMPILER_ID} STREQUAL GNU OR
     ${CMAKE_C_COMPILER_ID} STREQUAL Clang)
     # -Wstrict-prototypes
 elseif (${CMAKE_C_COMPILER_ID} STREQUAL MSVC)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4255 /wd4464 /wd4820")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4255 /wd4464 /wd4820 /wd4996")
 endif()
 
+add_subdirectory(common)
 add_subdirectory(memory)

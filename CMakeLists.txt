@@ -37,8 +37,10 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${warnings}")
 include_directories(include)
 
 add_library(elegan-c
+    include/elegan-c/common.h
     include/elegan-c/memory.h
     include/elegan-c/string.h
+    src/common.c
     src/memory.c
 )
 
