@@ -1,0 +1,1 @@
+add_unit_test(el_default_handlers)
