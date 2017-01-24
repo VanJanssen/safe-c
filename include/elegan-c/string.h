@@ -21,7 +21,7 @@ typedef char * cstring;
  * A less verbose way to declare a constant c-string. The pointer cannot be
  * changed and neither can the string to which it points.
  */
-typedef const char const * const_cstring;
+typedef const char * const const_cstring;
 
 /**
  * cstring_array
