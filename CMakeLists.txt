@@ -38,6 +38,7 @@ include_directories(include)
 
 add_library(elegan-c
     include/elegan-c/memory.h
+    include/elegan-c/string.h
     src/memory.c
 )
 
