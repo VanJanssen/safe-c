@@ -43,7 +43,7 @@ Test(el_custom_malloc, max_triggers_function)
     void *pointer = el_custom_malloc(SIZE_MAX, handlers);
     cr_assert(max_function_called);
 
-    safe_free(pointer);
+    el_free(pointer);
 }
 
 Test(el_custom_malloc, handlers_out_stream_null)
@@ -52,7 +52,7 @@ Test(el_custom_malloc, handlers_out_stream_null)
     handlers.out_stream = NULL;
 
     void *pointer = el_custom_malloc(10, handlers);
-    safe_free(pointer);
+    el_free(pointer);
 }
 
 Test(el_custom_malloc, handlers_error_stream_null)
@@ -61,7 +61,7 @@ Test(el_custom_malloc, handlers_error_stream_null)
     handlers.error_stream = NULL;
 
     void *pointer = el_custom_malloc(10, handlers);
-    safe_free(pointer);
+    el_free(pointer);
 }
 
 Test(el_custom_malloc, handlers_error_function_null)
@@ -70,7 +70,7 @@ Test(el_custom_malloc, handlers_error_function_null)
     handlers.error_function = NULL;
 
     void *pointer = el_custom_malloc(10, handlers);
-    safe_free(pointer);
+    el_free(pointer);
 }
 
 Test(el_custom_malloc, handlers_all_null)
@@ -81,5 +81,5 @@ Test(el_custom_malloc, handlers_all_null)
     handlers.error_function = NULL;
 
     void *pointer = el_custom_malloc(10, handlers);
-    safe_free(pointer);
+    el_free(pointer);
 }

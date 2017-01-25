@@ -10,7 +10,7 @@ Test(el_unsafe_malloc, file_null)
     el_handlers handlers = el_default_handlers();
     handlers.error_function = NULL;
     void *pointer = el_unsafe_malloc(0, handlers, NULL, __LINE__);
-    safe_free(pointer);
+    el_free(pointer);
 }
 
 Test(el_unsafe_malloc, zero_verify_output)
@@ -19,7 +19,7 @@ Test(el_unsafe_malloc, zero_verify_output)
     el_handlers handlers = el_default_handlers();
     handlers.error_function = NULL;
     void *pointer = el_unsafe_malloc(0, handlers, "file", 137);
-    safe_free(pointer);
+    el_free(pointer);
 
     fflush(stderr);
     cr_assert_stderr_eq_str("Error allocating memory: Function "
@@ -33,7 +33,7 @@ Test(el_unsafe_malloc, max_verify_output)
     el_handlers handlers = el_default_handlers();
     handlers.error_function = NULL;
     void *pointer = el_unsafe_malloc(SIZE_MAX, handlers, "file", 137);
-    safe_free(pointer);
+    el_free(pointer);
 
     fflush(stderr);
     cstring reference_string = el_malloc(1000);
@@ -42,5 +42,5 @@ Test(el_unsafe_malloc, max_verify_output)
             " '%zu' bytes of memory were requested, but this amount could not"
             " be allocated.\n", SIZE_MAX);
     cr_assert_stderr_eq_str(reference_string);
-    safe_free(reference_string);
+    el_free(reference_string);
 }
