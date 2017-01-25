@@ -4,10 +4,7 @@
 
 #include <stdint.h>
 
-Test(el_malloc, zero_expect_exit, .exit_code = 1)
-{
-    el_malloc(0);
-}
+Test(el_malloc, zero_expect_exit, .exit_code = 1) { el_malloc(0); }
 
 Test(el_malloc, max_expect_exit, .exit_code = 1)
 {

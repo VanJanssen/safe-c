@@ -22,9 +22,9 @@ Test(el_unsafe_malloc, zero_verify_output)
     el_free(pointer);
 
     fflush(stderr);
-    cr_assert_stderr_eq_str("Error allocating memory: Function "
-            "'el_unsafe_malloc' was called from file 'file' at line '137', and"
-            " zero memory was requested.\n");
+    cr_assert_stderr_eq_str(
+        "Error allocating memory: Function 'el_unsafe_malloc' was called from "
+        "file 'file' at line '137', and zero memory was requested.\n");
 }
 
 Test(el_unsafe_malloc, max_verify_output)
@@ -37,10 +37,11 @@ Test(el_unsafe_malloc, max_verify_output)
 
     fflush(stderr);
     cstring reference_string = el_malloc(1000);
-    sprintf(reference_string, "Error allocating memory: Function "
-            "'el_unsafe_malloc' was called from file 'file' at line '137' and"
-            " '%zu' bytes of memory were requested, but this amount could not"
-            " be allocated.\n", SIZE_MAX);
+    sprintf(reference_string,
+            "Error allocating memory: Function 'el_unsafe_malloc' was called "
+            "from file 'file' at line '137' and '%zu' bytes of memory were "
+            "requested, but this amount could not be allocated.\n",
+            SIZE_MAX);
     cr_assert_stderr_eq_str(reference_string);
     el_free(reference_string);
 }
