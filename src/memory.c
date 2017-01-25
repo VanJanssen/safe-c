@@ -80,9 +80,9 @@ void *el_unsafe_malloc(const size_t size, const el_handlers handlers,
     return memset(memory, 0, size);
 }
 
-void safe_free_function(void** pointer_address)
+void el_free_address(void **pointer_address)
 {
-    if (pointer_address != NULL)
+    if (pointer_address)
     {
         free(*pointer_address);
         *pointer_address = NULL;
@@ -146,7 +146,7 @@ void* safe_realloc_function(void** pointer_address, const size_t size,
     if (memory != *pointer_address)
     {
         // If the memory block is moved, relloc frees the pointer. To ensure
-        // the same behaviour as `safe_free`, we set the pointer to NULL.
+        // the same behaviour as `el_free`, we set the pointer to NULL.
         *pointer_address = NULL;
     }
 

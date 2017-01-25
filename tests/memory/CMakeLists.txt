@@ -1,6 +1,6 @@
 add_unit_test(el_malloc)
 add_unit_test(el_custom_malloc)
 add_unit_test(el_unsafe_malloc)
-add_unit_test(safe_free)
+add_unit_test(el_free)
 add_unit_test(safe_calloc)
 add_unit_test(safe_realloc)
