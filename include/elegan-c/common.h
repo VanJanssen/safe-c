@@ -5,7 +5,7 @@
 
 /**
  * el_handlers
- * 
+ *
  * This struct can be passed to various function to indicate which streams the
  * function should use and what function to call when an error occurs.
  */

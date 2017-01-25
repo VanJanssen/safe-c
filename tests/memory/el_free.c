@@ -2,10 +2,7 @@
 
 #include "elegan-c/memory.h"
 
-Test(el_free_address, null_succeed)
-{
-    el_free_address(NULL);
-}
+Test(el_free_address, null_succeed) { el_free_address(NULL); }
 
 Test(el_free, null_succeed)
 {
