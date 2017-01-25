@@ -7,34 +7,90 @@ extern "C" {
 
 #include <stdlib.h>
 
+#include "elegan-c/common.h"
+#include "elegan-c/string.h"
+
 /**
- * Memory allocation with strict boundary and error checking.
+ * Predictiable memory allocation with customizable boundary and error checking
+ * and logging for efficient debugging. It is not recommended to use this
+ * function directly, use these wrapper macros instead:
+ *      - el_malloc for most purposes
+ *      - el_custom_malloc if you want to specify the handlers yourself.
  *
  * @param size
  *      The size in bytes to be allocated. Be aware that size is an unsigned
  *      type, passing signed values can lead to conversion errors.
- *      If `size == 0`, this function will call `exit()` and print an error
- *      message indicating which function requested zero memory. You should set
- *      your pointer to NULL yourself explicitly if you want a pointer without
- *      memory allocation.
+ *      If `size == 0`, or the requested size can not be allocated, this
+ *      function will write an error message to `handlers.error_stream`, call
+ *      `handlers.error_function` and return NULL.
  *
- * @param calling_function
- *      The name of the function calling this function. You can pass a
- *      custom NULL termination string, or pass the __FUNCTION__ define. You
- *      can use the macro function `safe_malloc(size)`, which will automatically
- *      pass the __FUNCTION__ define as second parameter. This usage is the most
- *      convenient because calling it will be the same as `malloc`.
+ * @param handlers
+ *      Use this parameter to specify the behaviour of this function on errors.
+ *      The error message will be written to the `handlers.error_function` file
+ *      descriptor, set this to NULL to supress the message.
+ *      The function `handlers.error_function` will be called on an error,
+ *      unless it is set to NULL.
+ *
+ * @param calling_file
+ *      The file from which this function was called, this will be mentioned
+ *      in the error message to aid debugging. Set this to `__FILE__`.
+ *
+ * @param calling_line
+ *      The line from which this function was called, this will be mentioned
+ *      in the error message to aid debugging. Set this to `__LINE__`.
+ *
+ * @return
+ *      The return value will be a pointer to the allocated memory, the memory
+ *      will be initialized to all zero.
+ *      If an error occurs, this function will return NULL.
+ */
+void *el_unsafe_malloc(const size_t size, const el_handlers handlers,
+                       const_cstring calling_file, const int calling_line);
+
+/**
+ * Predictiable memory allocation with customizable boundary and error checking
+ * and logging for efficient debugging.
+ *
+ * @param size
+ *      The size in bytes to be allocated. Be aware that size is an unsigned
+ *      type, passing signed values can lead to conversion errors.
+ *      If `size == 0`, or the requested size can not be allocated, this
+ *      function will write an error message to `handlers.error_stream`, call
+ *      `handlers.error_function` and return NULL.
+ *
+ * @param handlers
+ *      Use this parameter to specify the behaviour of this function on errors.
+ *      The error message will be written to the `handlers.error_function` file
+ *      descriptor, set this to NULL to supress the message.
+ *      The function `handlers.error_function` will be called on an error,
+ *      unless it is set to NULL.
+ *
+ * @return
+ *      The return value will be a pointer to the allocated memory, the memory
+ *      will be initialized to all zero.
+ *      If an error occurs, this function will return NULL.
+ */
+#define el_custom_malloc(size, handlers) \
+        el_unsafe_malloc((size), (handlers), __FILE__, __LINE__);
+
+/**
+ * Predictiable memory allocation with strict boundary and error checking and
+ * and logging for efficient debugging.
+ *
+ * @param size
+ *      The size in bytes to be allocated. Be aware that size is an unsigned
+ *      type, passing signed values can lead to conversion errors.
+ *      If `size == 0`, or the requested size can not be allocated, this
+ *      function will write an error message to `stderr` and call `exit()`.
  *
  * @return
  *      The return value will be a pointer to the allocated memory, the memory
  *      will be initialized to all zero.
  *      If for some reason the memory couldn't be allocated, this function will
- *      call `exit()` and print an error message indicating the caller function
+ *      call `exit()` and print an error message indicating the call location
  *      and the amount of memory requested.
  */
-void* safe_malloc_function(const size_t size, const char* calling_function);
-
-#define safe_malloc(size) safe_malloc_function(size, __FUNCTION__);
+#define el_malloc(size) el_custom_malloc((size), el_default_handlers());
 
 /**
  * Frees previously allocated memory and sets the passed pointer to NULL.

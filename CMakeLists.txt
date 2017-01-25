@@ -9,6 +9,10 @@ find_package(codecov)
 
 
 # =========================== Set compiler options ===========================
+if(${CMAKE_C_COMPILER_ID} STREQUAL GNU)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
+endif()
+
 if(${CMAKE_C_COMPILER_ID} STREQUAL GNU OR
     ${CMAKE_C_COMPILER_ID} STREQUAL Clang)
     # -Wstrict-prototypes can't be used because it causes errors in Criterion
@@ -31,6 +35,8 @@ elseif (${CMAKE_C_COMPILER_ID} STREQUAL MSVC)
 endif()
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${warnings}")
+
+
 
 
 # ========================== Specify library sources =========================

@@ -21,22 +21,63 @@ static void print_memory_allocation_error(const char* calling_function,
             calling_function, target_function, size);
 }
 
-void* safe_malloc_function(const size_t size, const char* calling_function)
+static void handle_zero_request(const el_handlers handlers,
+                                const_cstring calling_file,
+                                const int calling_line,
+                                const_cstring target_function)
+{
+    if (handlers.error_stream)
+    {
+        fprintf(handlers.error_stream, "Error allocating memory: Function '%s'"
+                " was called from file '%s' at line '%d', and zero memory was "
+                "requested.\n", target_function, calling_file, calling_line);
+    }
+
+    if (handlers.error_function)
+    {
+        handlers.error_function(EXIT_FAILURE);
+    }
+}
+
+static void handle_allocation_error(const el_handlers handlers,
+                                    const_cstring calling_file,
+                                    const int calling_line,
+                                    const_cstring target_function,
+                                    const size_t requested_size)
+{
+    if (handlers.error_stream)
+    {
+        fprintf(handlers.error_stream, "Error allocating memory: Function '%s'"
+                " was called from file '%s' at line '%d' and '%zu' bytes of "
+                "memory were requested, but this amount could not be "
+                "allocated.\n", target_function, calling_file, calling_line,
+                requested_size);
+    }
+
+    if (handlers.error_function)
+    {
+        handlers.error_function(EXIT_FAILURE);
+    }
+}
+
+void *el_unsafe_malloc(const size_t size, const el_handlers handlers,
+                       const_cstring calling_file, const int calling_line)
 {
     if (size == 0)
     {
-        print_zero_memory_requested(calling_function, __FUNCTION__, "size");
-        exit(EXIT_FAILURE);
+        handle_zero_request(handlers, calling_file, calling_line, __func__);
+        return NULL;
     }
 
-    void* memory = malloc(size);
+    void *memory = malloc(size);
     if (!memory)
     {
-        print_memory_allocation_error(calling_function, __FUNCTION__, size);
-        exit(EXIT_FAILURE);
+        handle_allocation_error(handlers, calling_file, calling_line,
+                __func__, size);
+        return NULL;
     }
-    memory = memset(memory, 0, size);
-    return memory;
+
+    return memset(memory, 0, size);
 }
 
 void safe_free_function(void** pointer_address)
