@@ -29,5 +29,7 @@ build_script:
   - cd build
   - cmake ..
   - cmake --build . --config %configuration%
-  - ctest
+  # Criterion assertions can't be used with the Release configuration, it
+  # causes errors. So we only execute `ctest` on other configurations.
+  - ps: if($env:configuration -ne "Release") { ctest }
   
