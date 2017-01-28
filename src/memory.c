@@ -107,6 +107,7 @@ void *el_unsafe_calloc(const size_t number_of_elements,
     {
         handle_allocation_error(handlers, calling_file, calling_line, __func__,
                                 number_of_elements * element_size);
+        return NULL;
     }
 
     // No memset because calloc already initializes memory to all zero
