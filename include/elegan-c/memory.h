@@ -226,58 +226,144 @@ void *el_unsafe_calloc(const size_t number_of_elements,
                      el_default_handlers())
 
 /**
-* Memory reallocation with strict boundary and error checking.
-*
-* @param pointer_address
-*      The address of the pointer pointing to the memory block to be
-*      reallocated.
-*      This function changes the size of this memory block to `size` bytes. The
-*      contents will be unchanged in the range from the start of the region up
-*      to the minimum of the old and the new size.
-*      If `pointer_address == NULL`, this function will call `exit()` and print
-*      an error message containing the caller function.
-*      Unless the value pointed to be `pointer_address` is NULL, it must be a
-*      valid pointer returned by an earlier call to a memory (re)allocation
-*      function.
-*      To make it easier to call this function, the macro function
-*      `safe_realloc(pointer, size)` can be used. This macro function takes the
-*      address of the pointer, which makes calling it the same as calling
-*      `realloc`.
-*
-* @param size
-*      The new size in bytes to for the memory block pointed to by `pointer`.
-*      Be aware that size is an unsigned type, passing signed values can lead
-*      to conversion errors.
-*      If `size == 0`, this function will free the pointer and then call
-*      `exit()` and print an error message indicating which function requested
-*      zero memory. You should set your pointer to NULL yourself explicitly if
-*      you want a pointer without memory allocation.
-*      If the new size is larger than the old size, the added memory will
-*      _not_ be initialized.
-*
-* @param calling_function
-*      The name of the function calling this function. You can pass a
-*      custom NULL termination string, or pass the __FUNCTION__ define. You
-*      can use the macro function `safe_malloc(size)`, which will automatically
-*      pass the __FUNCTION__ define as second parameter. This usage is the most
-*      convenient because calling it will be the same as `realloc`.
-*
-* @return
-*      The return value will be a pointer to the reallocated memory.
-*      If the new size is larger than the old size, the added memory will _not_
-*      be initialized.
-*      If the memory block was moved, this pointer points to the new block and
-*      the previous pointer is freed and set to NULL. Otherwise this pointer
-*      is the same pointer as before.
-*      If for some reason the memory couldn't be reallocated, this function will
-*      call `exit()` and print an error message indicating the caller function
-*      and the amount of memory requested.
-*/
-void *safe_realloc_function(void **pointer_address, const size_t size,
-                            const char *calling_function);
+ * Predictiable memory reallocation with customizable boundary and error
+ * checking and logging for efficient debugging. It is not recommended to use
+ * this function directly, use these wrapper macros instead:
+ *      - el_realloc for most purposes
+ *      - el_custom_realloc if you want to specify the handlers yourself.
+ *
+ * @param pointer_address
+ *      The address of the pointer pointing to the memory block to be
+ *      reallocated.
+ *      This function changes the size of this memory block to `size` bytes. The
+ *      contents will be unchanged in the range from the start of the region up
+ *      to the minimum of the old and the new size.
+ *      If `pointer_address == NULL` or `(*pointer_address) == NULL`, the
+ *      behavior of this function will be the same as the `el_malloc` functions.
+ *      If `pointer_address != NULL` and `(*pointer_address) != NULL`, the
+ *      pointer must be valid (returned by a earlier call to a memory allocation
+ *      function).
+ *
+ * @param size
+ *      The new size in bytes for the memory block. Be aware that size is an
+ *      unsigned type, passing signed values can lead to conversion errors.
+ *      If `size == 0`, or the requested size can not be allocated, this
+ *      function will write an error message to `handlers.error_stream`, call
+ *      `handlers.error_function` and return NULL.
+ *      If `size == 0`, it will be equivalent to calling `el_free`, if the
+ *      requested size can not be allocated, this function will return NULL.
+ *      If the new size is larger than the old size, the added memory will
+ *      _not_ be initialized.
+ *
+ * @param handlers
+ *      Use this parameter to specify the behaviour of this function on errors.
+ *      The error message will be written to the `handlers.error_function` file
+ *      descriptor, set this to NULL to supress the message.
+ *      The function `handlers.error_function` will be called on an error,
+ *      unless it is set to NULL.
+ *
+ * @param calling_file
+ *      The file from which this function was called, this will be mentioned
+ *      in the error message to aid debugging. Set this to `__FILE__`.
+ *
+ * @param calling_line
+ *      The line from which this function was called, this will be mentioned
+ *      in the error message to aid debugging. Set this to `__LINE__`.
+ *
+ * @return
+ *      The return value will be a pointer to the reallocated memory.
+ *      If the new size is larger than the old size, the added memory will _not_
+ *      be initialized.
+ *      If the memory block was moved, the returned pointer will point to this
+ *      new location, the passed pointer will be set to NULL.
+ *      If this function fails, the original block is left untouched (it is not
+ *      freed or moved) and it will return NULL.
+ */
+void *el_unsafe_realloc(void **pointer_address, const size_t size,
+                        const el_handlers handlers, const_cstring calling_file,
+                        const int calling_line);
 
-#define safe_realloc(pointer, size)                                            \
-    safe_realloc_function((void **)&(pointer), size, __FUNCTION__)
+/**
+ * Predictiable memory reallocation with customizable boundary and error
+ * checking and logging for efficient debugging.
+ *
+ * @param pointer
+ *      The pointer pointing to the memory block to be reallocated.
+ *      This function changes the size of this memory block to `size` bytes. The
+ *      contents will be unchanged in the range from the start of the region up
+ *      to the minimum of the old and the new size.
+ *      If `address == NULL`, the behavior of this function will be the same as
+ *      the `el_malloc` functions.
+ *      If `pointer != NULL` the pointer must be valid (returned by a earlier
+ *      call to a memory allocation function).
+ *
+ * @param size
+ *      The new size in bytes for the memory block. Be aware that size is an
+ *      unsigned type, passing signed values can lead to conversion errors.
+ *      If `size == 0`, or the requested size can not be allocated, this
+ *      function will write an error message to `handlers.error_stream`, call
+ *      `handlers.error_function` and return NULL.
+ *      If `size == 0`, it will be equivalent to calling `el_free`, if the
+ *      requested size can not be allocated, this function will return NULL.
+ *      If the new size is larger than the old size, the added memory will
+ *      _not_ be initialized.
+ *
+ * @param handlers
+ *      Use this parameter to specify the behaviour of this function on errors.
+ *      The error message will be written to the `handlers.error_function` file
+ *      descriptor, set this to NULL to supress the message.
+ *      The function `handlers.error_function` will be called on an error,
+ *      unless it is set to NULL.
+ *
+ * @return
+ *      The return value will be a pointer to the reallocated memory.
+ *      If the new size is larger than the old size, the added memory will _not_
+ *      be initialized.
+ *      If the memory block was moved, the returned pointer will point to this
+ *      new location, the passed pointer will be set to NULL.
+ *      If this function fails, the original block is left untouched (it is not
+ *      freed or moved) and it will return NULL.
+ */
+#define el_custom_realloc(pointer, size, handlers)                             \
+    el_unsafe_realloc((void **)&(pointer), (size), (handlers), __FILE__,       \
+                      __LINE__)
+
+/**
+ * Predictiable memory allocation with strict boundary and error checking and
+ * and logging for efficient debugging.
+ *
+ * @param pointer
+ *      The pointer pointing to the memory block to be reallocated.
+ *      This function changes the size of this memory block to `size` bytes. The
+ *      contents will be unchanged in the range from the start of the region up
+ *      to the minimum of the old and the new size.
+ *      If `address == NULL`, the behavior of this function will be the same as
+ *      the `el_malloc` functions.
+ *      If `pointer != NULL` the pointer must be valid (returned by a earlier
+ *      call to a memory allocation function).
+ *
+ * @param size
+ *      The new size in bytes for the memory block. Be aware that size is an
+ *      unsigned type, passing signed values can lead to conversion errors.
+ *      If `size == 0`, or the requested size can not be allocated, this
+ *      function will write an error message to `stderr` and call `exit()`.
+ *      If the new size is larger than the old size, the added memory will
+ *      _not_ be initialized.
+ *
+ * @return
+ *      The return value will be a pointer to the reallocated memory.
+ *      If the new size is larger than the old size, the added memory will _not_
+ *      be initialized.
+ *      If the memory block was moved, the returned pointer will point to this
+ *      new location, the passed pointer will be set to NULL.
+ *      If this function fails, the original block is left untouched (it is not
+ *      freed or moved) and it will return NULL.
+ *      If for some reason the memory couldn't be allocated, this function will
+ *      call `exit()` and print an error message indicating the call location
+ *      and the amount of memory requested.
+ */
+#define el_realloc(pointer, size)                                              \
+    el_custom_realloc((pointer), (size), el_default_handlers())
 
 #ifdef __cplusplus
 }

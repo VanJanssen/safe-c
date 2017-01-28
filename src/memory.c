@@ -114,35 +114,43 @@ void *el_unsafe_calloc(const size_t number_of_elements,
     return memory;
 }
 
-void *safe_realloc_function(void **pointer_address, const size_t size,
-                            const char *calling_function)
+void *el_unsafe_realloc(void **pointer_address, const size_t size,
+                        const el_handlers handlers, const_cstring calling_file,
+                        const int calling_line)
 {
-    if (!pointer_address)
-    {
-        fprintf(stderr, "Error allocating memory: The function %s called "
-                        "'safe_realloc', but the address to the pointer to be "
-                        "reallocated is NULL.\n",
-                calling_function);
-        exit(EXIT_FAILURE);
-    }
-
     if (size == 0)
     {
-        print_zero_memory_requested(calling_function, __FUNCTION__, "size");
+        handle_zero_request(handlers, calling_file, calling_line, __func__);
+        el_free_address(pointer_address);
+        return NULL;
+    }
+
+    if (!pointer_address || !(*pointer_address))
+    {
+        void *memory = el_custom_malloc(size, el_null_handlers());
+        if (!memory)
+        {
+            handle_allocation_error(handlers, calling_file, calling_line,
+                                    __func__, size);
+            return NULL;
+        }
+        else
+        {
+            return memory;
+        }
     }
 
     void *memory = realloc(*pointer_address, size);
     if (!memory)
     {
-        print_memory_allocation_error(calling_function, __FUNCTION__, size);
-        exit(EXIT_FAILURE);
+        handle_allocation_error(handlers, calling_file, calling_line, __func__,
+                                size);
+        return NULL;
     }
 
-    if (memory != *pointer_address)
+    if (memory != (*pointer_address))
     {
-        // If the memory block is moved, relloc frees the pointer. To ensure
-        // the same behaviour as `el_free`, we set the pointer to NULL.
-        *pointer_address = NULL;
+        (*pointer_address) = NULL;
     }
 
     return memory;
