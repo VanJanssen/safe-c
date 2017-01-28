@@ -3,12 +3,12 @@ set(CMAKE_LEGACY_CYGWIN_WIN32 0)
 
 project ("elegan-c" C)
 
-# =========================== Enable code coverage ===========================
+# ============================ Enable code coverage ============================
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/.cmake/codecov/cmake" ${CMAKE_MODULE_PATH})
 find_package(codecov)
 
 
-# =========================== Set compiler options ===========================
+# ============================ Set compiler options ============================
 if(${CMAKE_C_COMPILER_ID} STREQUAL GNU)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
 endif()
@@ -39,7 +39,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${warnings}")
 
 
 
-# ========================== Specify library sources =========================
+# ========================== Specify library sources ===========================
 include_directories(include)
 
 add_library(elegan-c
@@ -57,7 +57,7 @@ add_coverage(elegan-c)
 coverage_evaluate()
 
 
-# ======================== Enable testing if possible ========================
+# ========================= Enable testing if possible =========================
 set(dependencies_include_dir ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/include)
 set(dependencies_lib_dir ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/lib)
 
