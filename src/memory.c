@@ -92,36 +92,24 @@ void el_free_address(void **pointer_address)
     }
 }
 
-void *safe_calloc_function(const size_t number_of_elements,
-                           const size_t element_size,
-                           const char *calling_function)
+void *el_unsafe_calloc(const size_t number_of_elements,
+                       const size_t element_size, const el_handlers handlers,
+                       const_cstring calling_file, const int calling_line)
 {
-    if (number_of_elements == 0)
+    if (number_of_elements == 0 || element_size == 0)
     {
-        print_zero_memory_requested(calling_function, __FUNCTION__,
-                                    "number_of_elements");
-        exit(EXIT_FAILURE);
-    }
-
-    if (element_size == 0)
-    {
-        print_zero_memory_requested(calling_function, __FUNCTION__,
-                                    "element_size");
-        exit(EXIT_FAILURE);
+        handle_zero_request(handlers, calling_file, calling_line, __func__);
+        return NULL;
     }
 
     void *memory = calloc(number_of_elements, element_size);
     if (!memory)
     {
-        fprintf(stderr,
-                "Error allocating memory: The function %s called 'safe_calloc'"
-                " requesting %zu elements with size %zu each, but an error "
-                "occurred allocating this amount of memory.\n",
-                calling_function, number_of_elements, element_size);
-        exit(EXIT_FAILURE);
+        handle_allocation_error(handlers, calling_file, calling_line, __func__,
+                                number_of_elements * element_size);
     }
-    // No memset because calloc already initializes memory to all zero.
 
+    // No memset because calloc already initializes memory to all zero
     return memory;
 }
 

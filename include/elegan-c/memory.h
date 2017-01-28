@@ -115,47 +115,115 @@ void el_free_address(void **pointer_address);
 #define el_free(pointer) el_free_address((void **)&(pointer))
 
 /**
- * Memory allocation with strict boundary and error checking.
+ * Predictiable memory allocation with customizable boundary and error checking
+ * and logging for efficient debugging. It is not recommended to use this
+ * function directly, use these wrapper macros instead:
+ *      - el_calloc for most purposes
+ *      - el_custom_calloc if you want to specify the handlers yourself.
  *
  * @param number_of_elements
- *      The number of elements (each with size `element_size`) to bo allocated.
+ *      The number of elements (each with size `element_size`) to be allocated.
  *      Be aware that the number of elements is an unsigned type, passing signed
  *      values can lead to conversion errors.
- *      If `number_of_elements == 0`, this function will call `exit()` and print
- *      an error message indicating which function requested zero memory. You
- *      should set your pointer to NULL yourself explicitly if you want a
- *      pointer without memory allocation.
+ *      If `number_of_elements == 0`, or the requested number can not be
+ *      allocated, this function will write an error message to
+ *      `handlers.error_stream`, call `handlers.error_function` and return NULL.
  *
  * @param element_size
  *      The size in bytes of each element to be allocated. Be aware that
  *      element_size is an unsigned type, passing signed values can lead to
  *      conversion errors.
- *      If `element_size == 0`, this function will call `exit()` and print an
- *      error message indicating which function requested zero memory. You
- *      should set your pointer to NULL yourself explicitly if you want a
- *      pointer without memory allocation.
+ *      If `element_size == 0`, or the requested size can not be allocated, this
+ *      function will write an error message to `handlers.error_stream`, call
+ *      `handlers.error_function` and return NULL.
  *
- * @param calling_function
- *      The name of the function calling this function. You can pass a
- *      custom NULL termination string, or pass the __FUNCTION__ define. You
- *      can use the macro function `safe_calloc(number_of_elements,
- *      element_size)`, which will automatically pass the __FUNCTION__ define
- *      as second parameter. This usage is the most convenient because calling
- *      it will be the same as `calloc`.
+ * @param handlers
+ *      Use this parameter to specify the behaviour of this function on errors.
+ *      The error message will be written to the `handlers.error_function` file
+ *      descriptor, set this to NULL to supress the message.
+ *      The function `handlers.error_function` will be called on an error,
+ *      unless it is set to NULL.
+ *
+ * @param calling_file
+ *      The file from which this function was called, this will be mentioned
+ *      in the error message to aid debugging. Set this to `__FILE__`.
+ *
+ * @param calling_line
+ *      The line from which this function was called, this will be mentioned
+ *      in the error message to aid debugging. Set this to `__LINE__`.
  *
  * @return
  *      The return value will be a pointer to the allocated memory, the memory
  *      will be initialized to all zero.
+ *      If an error occurs, this function will return NULL.
+ */
+void *el_unsafe_calloc(const size_t number_of_elements,
+                       const size_t element_size, const el_handlers handlers,
+                       const_cstring calling_file, const int calling_line);
+
+/**
+ * Predictiable memory allocation with customizable boundary and error checking
+ * and logging for efficient debugging.
+ *
+ * @param number_of_elements
+ *      The number of elements (each with size `element_size`) to be allocated.
+ *      Be aware that the number of elements is an unsigned type, passing signed
+ *      values can lead to conversion errors.
+ *      If `number_of_elements == 0`, or the requested number can not be
+ *      allocated, this function will write an error message to
+ *      `handlers.error_stream`, call `handlers.error_function` and return NULL.
+ *
+ * @param element_size
+ *      The size in bytes of each element to be allocated. Be aware that
+ *      element_size is an unsigned type, passing signed values can lead to
+ *      conversion errors.
+ *      If `element_size == 0`, or the requested size can not be allocated, this
+ *      function will write an error message to `handlers.error_stream`, call
+ *      `handlers.error_function` and return NULL.
+ *
+ * @param handlers
+ *      Use this parameter to specify the behaviour of this function on errors.
+ *      The error message will be written to the `handlers.error_function` file
+ *      descriptor, set this to NULL to supress the message.
+ *      The function `handlers.error_function` will be called on an error,
+ *      unless it is set to NULL.
+ *
+ * @return
+ *      The return value will be a pointer to the allocated memory, the memory
+ *      will be initialized to all zero.
+ *      If an error occurs, this function will return NULL.
+ */
+#define el_custom_calloc(number_of_elements, element_size, handlers)           \
+    el_unsafe_calloc((number_of_elements), (element_size), (handlers),         \
+                     __FILE__, __LINE__)
+
+/**
+ * Predictiable memory allocation with strict boundary and error checking and
+ * and logging for efficient debugging.
+ *
+ * @param number_of_elements
+ *      The number of elements (each with size `element_size`) to be allocated.
+ *      Be aware that the number of elements is an unsigned type, passing signed
+ *      values can lead to conversion errors.
+ *      If `number_of_elements == 0`, or the requested number can not be
+ *      allocated, , this function will write an error message to `stderr` and
+ *      call `exit()`
+ *
+ * @param element_size
+ *      The size in bytes of each element to be allocated. Be aware that
+ *      element_size is an unsigned type, passing signed values can lead to
+ *      conversion errors.
+ *      If `element_size == 0`, or the requested size can not be allocated, this
+ *      function will write an error message to `stderr` and call `exit()`
+ *
+ * @return
  *      If for some reason the memory couldn't be allocated, this function will
- *      call `exit()` and print an error message indicating the caller function
+ *      call `exit()` and print an error message indicating the call location
  *      and the amount of memory requested.
  */
-void *safe_calloc_function(const size_t number_of_elements,
-                           const size_t element_size,
-                           const char *calling_function);
-
-#define safe_calloc(number_of_elements, element_size)                          \
-    safe_calloc_function(number_of_elements, element_size, __FUNCTION__)
+#define el_calloc(number_of_elements, element_size)                            \
+    el_custom_calloc((number_of_elements), (element_size),                     \
+                     el_default_handlers())
 
 /**
 * Memory reallocation with strict boundary and error checking.
