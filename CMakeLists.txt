@@ -78,3 +78,21 @@ if(CRITERION)
 else(CRITERION)
     message(STATUS "Criterion - not found")
 endif()
+
+
+# ========================== Add clang-format target ===========================
+find_program(CLANG_FORMAT NAMES clang-format clang-format-3.6 clang-format-3.5 clang-format-3.4)
+if(CLANG_FORMAT)
+    message(STATUS "clang-format - found")
+    file(GLOB_RECURSE include_files include/*.c include/*.h)
+    file(GLOB_RECURSE source_files  src/*.c     src/*.h)
+    file(GLOB_RECURSE test_files    tests/*.c   test/*.h)
+    add_custom_target(
+            format
+            COMMAND ${CLANG_FORMAT}
+            -i
+            ${include_files} ${source_files} ${test_files}
+    )
+else()
+    message(STATUS "clang-format - not found")
+endif()
