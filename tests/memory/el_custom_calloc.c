@@ -109,11 +109,7 @@ Test(el_custom_calloc, handlers_error_function_null)
 
 Test(el_custom_calloc, handlers_all_null)
 {
-    el_handlers handlers = el_default_handlers();
-    handlers.out_stream = NULL;
-    handlers.error_stream = NULL;
-    handlers.error_function = NULL;
-
+    el_handlers handlers = el_null_handlers();
     void *pointer = el_custom_calloc(10, 10, handlers);
     el_free(pointer);
 }

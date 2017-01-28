@@ -75,11 +75,7 @@ Test(el_custom_malloc, handlers_error_function_null)
 
 Test(el_custom_malloc, handlers_all_null)
 {
-    el_handlers handlers = el_default_handlers();
-    handlers.out_stream = NULL;
-    handlers.error_stream = NULL;
-    handlers.error_function = NULL;
-
+    el_handlers handlers = el_null_handlers();
     void *pointer = el_custom_malloc(10, handlers);
     el_free(pointer);
 }
