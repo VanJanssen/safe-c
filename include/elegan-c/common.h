@@ -9,7 +9,8 @@
  * This struct can be passed to various function to indicate which streams the
  * function should use and what function to call when an error occurs.
  */
-typedef struct {
+typedef struct
+{
     FILE *out_stream;
     FILE *error_stream;
     void (*error_function)(int exit_code);
