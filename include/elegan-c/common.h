@@ -24,4 +24,9 @@ typedef struct
  */
 el_handlers el_default_handlers(void);
 
+/**
+ * Returns an `el_handlers` struct initialzed with all values null.
+ */
+el_handlers el_null_handlers(void);
+
 #endif /* ELEGAN_C_COMMON_H_ */

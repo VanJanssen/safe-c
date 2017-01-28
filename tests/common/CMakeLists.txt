@@ -1,1 +1,2 @@
 add_unit_test(el_default_handlers)
+add_unit_test(el_null_handlers)
