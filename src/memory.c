@@ -3,26 +3,6 @@
 #include <stdio.h>
 #include <string.h>
 
-static void print_zero_memory_requested(const char *calling_function,
-                                        const char *target_function,
-                                        const char *variable_name)
-{
-    fprintf(stderr, "Error allocating memory: The function '%s' called '%s' "
-                    "and requested zero memory ('%s' == 0). The pointer should"
-                    " be explicitly set to NULL instead.\n",
-            calling_function, target_function, variable_name);
-}
-
-static void print_memory_allocation_error(const char *calling_function,
-                                          const char *target_function,
-                                          const size_t size)
-{
-    fprintf(stderr, "Error allocating memory: The function '%s' called '%s' "
-                    "requesting %zu bytes of memory, but an error occurred "
-                    "allocating this amount of memory.\n",
-            calling_function, target_function, size);
-}
-
 static void handle_zero_request(const el_handlers handlers,
                                 const_cstring calling_file,
                                 const int calling_line,
