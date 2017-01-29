@@ -105,32 +105,31 @@ void *el_unsafe_realloc(void **pointer_address, const size_t size,
         return NULL;
     }
 
+    void *pointer = NULL;
     if (!pointer_address || !(*pointer_address))
     {
-        void *pointer = el_custom_malloc(size, el_null_handlers());
+        pointer = el_custom_malloc(size, el_null_handlers());
         if (!pointer)
         {
             handle_allocation_error(handlers, calling_file, calling_line,
                                     __func__, size);
             return NULL;
         }
-        else
+    }
+    else
+    {
+        pointer = realloc(*pointer_address, size);
+        if (!pointer)
         {
-            return pointer;
+            handle_allocation_error(handlers, calling_file, calling_line,
+                                    __func__, size);
+            return NULL;
         }
-    }
 
-    void *pointer = realloc(*pointer_address, size);
-    if (!pointer)
-    {
-        handle_allocation_error(handlers, calling_file, calling_line, __func__,
-                                size);
-        return NULL;
-    }
-
-    if (pointer != (*pointer_address))
-    {
-        (*pointer_address) = NULL;
+        if (pointer != (*pointer_address))
+        {
+            (*pointer_address) = NULL;
+        }
     }
 
     return pointer;
