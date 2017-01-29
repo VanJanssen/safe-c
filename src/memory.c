@@ -52,15 +52,15 @@ void *el_unsafe_malloc(const size_t size, const el_handlers handlers,
         return NULL;
     }
 
-    void *memory = malloc(size);
-    if (!memory)
+    void *pointer = malloc(size);
+    if (!pointer)
     {
         handle_allocation_error(handlers, calling_file, calling_line, __func__,
                                 size);
         return NULL;
     }
 
-    return memset(memory, 0, size);
+    return memset(pointer, 0, size);
 }
 
 void el_free_address(void **pointer_address)
@@ -82,8 +82,8 @@ void *el_unsafe_calloc(const size_t number_of_elements,
         return NULL;
     }
 
-    void *memory = calloc(number_of_elements, element_size);
-    if (!memory)
+    void *pointer = calloc(number_of_elements, element_size);
+    if (!pointer)
     {
         handle_allocation_error(handlers, calling_file, calling_line, __func__,
                                 number_of_elements * element_size);
@@ -91,7 +91,7 @@ void *el_unsafe_calloc(const size_t number_of_elements,
     }
 
     // No memset because calloc already initializes memory to all zero
-    return memory;
+    return pointer;
 }
 
 void *el_unsafe_realloc(void **pointer_address, const size_t size,
@@ -107,8 +107,8 @@ void *el_unsafe_realloc(void **pointer_address, const size_t size,
 
     if (!pointer_address || !(*pointer_address))
     {
-        void *memory = el_custom_malloc(size, el_null_handlers());
-        if (!memory)
+        void *pointer = el_custom_malloc(size, el_null_handlers());
+        if (!pointer)
         {
             handle_allocation_error(handlers, calling_file, calling_line,
                                     __func__, size);
@@ -116,22 +116,22 @@ void *el_unsafe_realloc(void **pointer_address, const size_t size,
         }
         else
         {
-            return memory;
+            return pointer;
         }
     }
 
-    void *memory = realloc(*pointer_address, size);
-    if (!memory)
+    void *pointer = realloc(*pointer_address, size);
+    if (!pointer)
     {
         handle_allocation_error(handlers, calling_file, calling_line, __func__,
                                 size);
         return NULL;
     }
 
-    if (memory != (*pointer_address))
+    if (pointer != (*pointer_address))
     {
         (*pointer_address) = NULL;
     }
 
-    return memory;
+    return pointer;
 }
