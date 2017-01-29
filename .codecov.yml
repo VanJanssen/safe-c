@@ -12,6 +12,9 @@ coverage:
     patch: yes
     changes: no
 
+ignore:
+  - "tests/.*"
+
 parsers:
   gcov:
     branch_detection:
