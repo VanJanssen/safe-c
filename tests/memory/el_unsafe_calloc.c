@@ -13,6 +13,14 @@ Test(el_unsafe_calloc, file_null)
     el_free(pointer);
 }
 
+Test(el_unsafe_calloc, line_negative)
+{
+    el_handlers handlers = el_default_handlers();
+    handlers.error_function = NULL;
+    void *pointer = el_unsafe_calloc(0, 0, handlers, __FILE__, -50);
+    el_free(pointer);
+}
+
 Test(el_unsafe_calloc, zero_elements_verify_output)
 {
     cr_redirect_stderr();

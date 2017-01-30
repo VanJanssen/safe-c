@@ -34,13 +34,13 @@ Test(el_calloc, both_max_expect_exit, .exit_code = 1)
     el_free(pointer);
 }
 
-Test(el_calloc, one_one_success, .exit_code = 0)
+Test(el_calloc, one_one_success)
 {
     void *pointer = el_calloc(1, 1);
     el_free(pointer);
 }
 
-Test(el_calloc, low_values_success, .exit_code = 0)
+Test(el_calloc, low_values_success)
 {
     void *pointer = el_calloc(100, 10);
     el_free(pointer);
